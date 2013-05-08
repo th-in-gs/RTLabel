@@ -260,7 +260,7 @@
 				else
 				{
 					[self applyBoldStyleToText:attrString atPosition:component.position withLength:[component.text length]];
-					[self applyColor:@"#FF0000" toText:attrString atPosition:component.position withLength:[component.text length]];
+					//[self applyColor:@"#FF0000" toText:attrString atPosition:component.position withLength:[component.text length]];
 				}
 			}
 			else
@@ -271,8 +271,9 @@
 				}
 				else
 				{
-					[self applyBoldStyleToText:attrString atPosition:component.position withLength:[component.text length]];
-					[self applySingleUnderlineText:attrString atPosition:component.position withLength:[component.text length]];
+					//[self applyBoldStyleToText:attrString atPosition:component.position withLength:[component.text length]];
+					//[self applySingleUnderlineText:attrString atPosition:component.position withLength:[component.text length]];
+                    [self applyColor:@"#0000FF" toText:attrString atPosition:component.position withLength:[component.text length]];
 				}
 			}
 			
@@ -635,13 +636,11 @@
 {
     CFTypeRef actualFontRef = CFAttributedStringGetAttribute(text, position, kCTFontAttributeName, NULL);
     CTFontRef boldFontRef = CTFontCreateCopyWithSymbolicTraits(actualFontRef, 0.0, NULL, kCTFontBoldTrait, kCTFontBoldTrait);
-    if (!boldFontRef) {
-        //fallback to system bold font
-        UIFont *font = [UIFont boldSystemFontOfSize:CTFontGetSize(actualFontRef)];
-        boldFontRef = CTFontCreateWithName ((__bridge CFStringRef)[font fontName], [font pointSize], NULL);
+    if (boldFontRef) {
+        CFAttributedStringSetAttribute(text, CFRangeMake(position, length), kCTFontAttributeName, boldFontRef);
+        CFRelease(boldFontRef);
     }
-    CFAttributedStringSetAttribute(text, CFRangeMake(position, length), kCTFontAttributeName, boldFontRef);
-    CFRelease(boldFontRef);
+    
 }
 
 - (void)applyBoldItalicStyleToText:(CFMutableAttributedStringRef)text atPosition:(int)position withLength:(int)length
