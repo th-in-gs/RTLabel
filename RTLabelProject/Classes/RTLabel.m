@@ -319,19 +319,18 @@
     CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString(attrString);
     CFRelease(attrString);
 	
+    CFRange range;
+	CGSize constraint = CGSizeMake(self.frame.size.width, CGFLOAT_MAX);
+	CGSize optimumSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0, [self.plainText length]), nil, constraint, &range);
+    self.optimumSize = optimumSize;
+    
     // Initialize a rectangular path.
 	CGMutablePathRef path = CGPathCreateMutable();
-	CGRect bounds = CGRectMake(0.0, 0.0, self.frame.size.width, self.frame.size.height);
+	CGRect bounds = CGRectMake((self.frame.size.width - optimumSize.width) * 0.5f, (self.frame.size.height - optimumSize.height) * 0.5f, optimumSize.width, optimumSize.height);
 	CGPathAddRect(path, NULL, bounds);
 	
 	// Create the frame and draw it into the graphics context
-	//CTFrameRef 
-    CTFrameRef frame = CTFramesetterCreateFrame(framesetter,CFRangeMake(0, 0), path, NULL);
-	
-	CFRange range;
-	CGSize constraint = CGSizeMake(self.frame.size.width, CGFLOAT_MAX);
-	self.optimumSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0, [self.plainText length]), nil, constraint, &range);
-	
+    CTFrameRef frame = CTFramesetterCreateFrame(framesetter,CFRangeMake(0, 0), path, NULL);	
 	
 	if (self.currentSelectedButtonComponentIndex==-1)
 	{
