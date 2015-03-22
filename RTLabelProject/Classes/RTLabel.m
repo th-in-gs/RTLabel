@@ -233,7 +233,7 @@
 	for (RTLabelComponent *component in textComponents)
 	{
 		NSInteger index = [textComponents indexOfObject:component];
-		component.componentIndex = index;
+		component.componentIndex = (int)index;
 		
 		if ([component.tagLabel caseInsensitiveCompare:@"i"] == NSOrderedSame)
 		{
